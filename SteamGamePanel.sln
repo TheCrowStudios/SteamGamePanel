@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32922.545
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamGamePanel", "SteamGamePanel\SteamGamePanel.csproj", "{47F1A0E1-B484-4C1E-9824-49E3B276C3BB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{47F1A0E1-B484-4C1E-9824-49E3B276C3BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{47F1A0E1-B484-4C1E-9824-49E3B276C3BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{47F1A0E1-B484-4C1E-9824-49E3B276C3BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{47F1A0E1-B484-4C1E-9824-49E3B276C3BB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {34225262-FBA0-4670-BA76-9E91DE6CD5B2}
+	EndGlobalSection
+EndGlobal
