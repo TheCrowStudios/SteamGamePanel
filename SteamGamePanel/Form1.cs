@@ -14,6 +14,7 @@ namespace SteamGamePanel
     {
         public static string configFile = "config.json";
         public static string[,] users;
+        public static string[,] selectedUsers;
         public static string steamLauncher;
         public static string sdaLauncher;
         public static string sandboxieLauncher;
@@ -23,9 +24,10 @@ namespace SteamGamePanel
         public static int windowWidth;
         public static int windowHeight;
         public static int keyPressSleep = 50;
+        public static bool launching = false;
 
         [DllImport("user32.dll")] static extern bool SetForegroundWindow(IntPtr hWnd);
-        [DllImport("user32.dll")] static extern bool SetWindowTextA(IntPtr hWnd);
+        [DllImport("user32.dll")] static extern bool SetWindowTextA(IntPtr hWnd, string text);
 
         public Form1()
         {
@@ -232,6 +234,12 @@ namespace SteamGamePanel
 
                 mlwUsers.Items.Add(listViewItem);
             }
+
+            txtSteamLauncher.Text = steamLauncher;
+            txtSteamDesktopAuthentiator.Text = sdaLauncher;
+            txtSandboxieLauncher.Text = sandboxieLauncher;
+            txtSandboxieConfigurationFile.Text = sandboxieConfigurationFile;
+            mcbResolution.Text = $"{screenWidth}x{screenHeight}";
         }
 
         public void UpdateSandboxie()
@@ -257,7 +265,7 @@ namespace SteamGamePanel
 
         private void btnRun_Click(object sender, EventArgs e)
         {
-            LaunchSteam("-applaunch 730 -sw -w {windowWidth} -h {windowHeight} -x {50 + i * windowWidth} -y {heightUsed + 50} +sv_upload +connect 86.14.115.126 +port 27015");
+            LaunchSteam(true);
         }
 
         private void btnKill_Click(object sender, EventArgs e)
@@ -282,20 +290,45 @@ namespace SteamGamePanel
 
         private void btnRunSteam_Click(object sender, EventArgs e)
         {
-            LaunchSteam("");
+            LaunchSteam(false);
         }
 
-        public void LaunchSteam(string _args)
+        public void LaunchSteam(bool _launchCsgo)
         {
+            if (launching) return;
+
+            launching = true;
+
+            if (mlwUsers.SelectedItems.Count == 0)
+            {
+                selectedUsers = new string[mlwUsers.Items.Count, 2];
+
+                for (var i = 0; i < selectedUsers.GetLength(0); i++)
+                {
+                    selectedUsers[i, 0] = mlwUsers.Items[i].SubItems[0].Text;
+                    selectedUsers[i, 1] = mlwUsers.Items[i].SubItems[1].Text;
+                }
+            } else
+            {
+                selectedUsers = new string[mlwUsers.SelectedItems.Count, 2];
+
+                for (var i = 0; i < selectedUsers.GetLength(0); i++)
+                {
+                    selectedUsers[i, 0] = mlwUsers.SelectedItems[i].SubItems[0].Text;
+                    selectedUsers[i, 1] = mlwUsers.SelectedItems[i].SubItems[1].Text;
+                }
+            }
+            
             Process sandboxie = new Process();
 
             int widthUsed = 0;
             int heightUsed = 0;
 
-            for (var i = 0; i < users.GetLength(0); i++)
+            for (var i = 0; i < selectedUsers.GetLength(0); i++)
             {
                 sandboxie.StartInfo.FileName = sandboxieLauncher;
-                sandboxie.StartInfo.Arguments = $"/box:{users[i, 0]} {steamLauncher} -login {users[i, 0]} {users[i, 1]} {_args}";
+                sandboxie.StartInfo.Arguments = $"/box:{selectedUsers[i, 0]} {steamLauncher} -login {selectedUsers[i, 0]} {selectedUsers[i, 1]} ";
+                if (_launchCsgo) sandboxie.StartInfo.Arguments += $"-applaunch 730 -sw -w {windowWidth} -h {windowHeight} -x {50 + i * windowWidth} -y {heightUsed + 50} +sv_upload +connect 86.14.115.126 +port 27015";
                 widthUsed += windowWidth + 50;
 
                 if (widthUsed + windowWidth + 50 > screenWidth)
@@ -307,9 +340,27 @@ namespace SteamGamePanel
                 sandboxie.StartInfo.UseShellExecute = true;
                 sandboxie.Start();
             }
+
+            EnterSteamGuard();
+
+            if (_launchCsgo)
+            {
+                tmrLaunchCsgo.Interval = 10000;
+                tmrLaunchCsgo.Start();
+                launching = false;
+                return;
+            }
+
+            launching = false;
         }
 
         public void EnterSteamGuard()
+        {
+            tmrSteamGuard.Interval = 10000;
+            tmrSteamGuard.Start();
+        }
+
+        private void tmrSteamGuard_Tick(object sender, EventArgs e)
         {
             Process sda = new Process();
 
@@ -321,12 +372,12 @@ namespace SteamGamePanel
             else sda = Process.GetProcessesByName("Steam Desktop Authenticator")[0];
 
             InputSimulator inputSimulator = new InputSimulator();
-            inputSimulator.Keyboard.Sleep(10000);
 
-            Process[] processes;
-            processes = Process.GetProcessesByName("steam");
+            Process[] processes = Process.GetProcessesByName("steam");
 
             int userCount = 0;
+
+            inputSimulator.Keyboard.Sleep(100);
 
             for (var i = 0; i < processes.Length; i++)
             {
@@ -364,6 +415,20 @@ namespace SteamGamePanel
 
                     userCount += 1;
                 }
+            }
+
+            tmrSteamGuard.Stop();
+        }
+
+        private void tmrLaunchCsgo_Tick(object sender, EventArgs e)
+        {
+            Process[] processes = Process.GetProcessesByName("csgo");
+
+            if (processes.Length != selectedUsers.GetLength(0)) return;
+
+            for (var i = 0; i < processes.Length; i++)
+            {
+                SetWindowTextA(processes[i].MainWindowHandle, selectedUsers[i, 0]);
             }
         }
     }
