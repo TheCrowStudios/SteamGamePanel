@@ -55,6 +55,7 @@
             this.btnKill = new MaterialSkin.Controls.MaterialButton();
             this.btnRunSteam = new MaterialSkin.Controls.MaterialButton();
             this.btnRun = new MaterialSkin.Controls.MaterialButton();
+            this.btnSave = new MaterialSkin.Controls.MaterialButton();
             this.SuspendLayout();
             // 
             // materialLabel1
@@ -193,6 +194,7 @@
             this.txtSteamLauncher.Text = "";
             this.txtSteamLauncher.TrailingIcon = null;
             this.txtSteamLauncher.UseTallSize = false;
+            this.txtSteamLauncher.TextChanged += new System.EventHandler(this.txtSteamLauncher_TextChanged);
             // 
             // txtSteamDesktopAuthentiator
             // 
@@ -211,6 +213,7 @@
             this.txtSteamDesktopAuthentiator.Text = "";
             this.txtSteamDesktopAuthentiator.TrailingIcon = null;
             this.txtSteamDesktopAuthentiator.UseTallSize = false;
+            this.txtSteamDesktopAuthentiator.TextChanged += new System.EventHandler(this.txtSteamDesktopAuthentiator_TextChanged);
             // 
             // txtSandboxieLauncher
             // 
@@ -229,6 +232,7 @@
             this.txtSandboxieLauncher.Text = "";
             this.txtSandboxieLauncher.TrailingIcon = null;
             this.txtSandboxieLauncher.UseTallSize = false;
+            this.txtSandboxieLauncher.TextChanged += new System.EventHandler(this.txtSandboxieLauncher_TextChanged);
             // 
             // txtSandboxieConfigurationFile
             // 
@@ -247,6 +251,7 @@
             this.txtSandboxieConfigurationFile.Text = "";
             this.txtSandboxieConfigurationFile.TrailingIcon = null;
             this.txtSandboxieConfigurationFile.UseTallSize = false;
+            this.txtSandboxieConfigurationFile.TextChanged += new System.EventHandler(this.txtSandboxieConfigurationFile_TextChanged);
             // 
             // tmrSteamGuard
             // 
@@ -279,6 +284,7 @@
             this.mcbResolution.Size = new System.Drawing.Size(176, 49);
             this.mcbResolution.StartIndex = 0;
             this.mcbResolution.TabIndex = 17;
+            this.mcbResolution.SelectedIndexChanged += new System.EventHandler(this.mcbResolution_SelectedIndexChanged);
             // 
             // materialLabel2
             // 
@@ -335,7 +341,7 @@
             this.btnOpenUsersFile.Depth = 0;
             this.btnOpenUsersFile.HighEmphasis = true;
             this.btnOpenUsersFile.Icon = null;
-            this.btnOpenUsersFile.Location = new System.Drawing.Point(219, 360);
+            this.btnOpenUsersFile.Location = new System.Drawing.Point(245, 360);
             this.btnOpenUsersFile.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnOpenUsersFile.MinimumSize = new System.Drawing.Size(180, 0);
             this.btnOpenUsersFile.MouseState = MaterialSkin.MouseState.HOVER;
@@ -356,7 +362,7 @@
             this.btnAddUsersFromFile.Depth = 0;
             this.btnAddUsersFromFile.HighEmphasis = true;
             this.btnAddUsersFromFile.Icon = null;
-            this.btnAddUsersFromFile.Location = new System.Drawing.Point(219, 408);
+            this.btnAddUsersFromFile.Location = new System.Drawing.Point(245, 408);
             this.btnAddUsersFromFile.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnAddUsersFromFile.MinimumSize = new System.Drawing.Size(180, 0);
             this.btnAddUsersFromFile.MouseState = MaterialSkin.MouseState.HOVER;
@@ -377,7 +383,7 @@
             this.btnReloadConfig.Depth = 0;
             this.btnReloadConfig.HighEmphasis = true;
             this.btnReloadConfig.Icon = null;
-            this.btnReloadConfig.Location = new System.Drawing.Point(219, 312);
+            this.btnReloadConfig.Location = new System.Drawing.Point(245, 312);
             this.btnReloadConfig.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnReloadConfig.MinimumSize = new System.Drawing.Size(180, 0);
             this.btnReloadConfig.MouseState = MaterialSkin.MouseState.HOVER;
@@ -398,7 +404,7 @@
             this.btnKillSteam.Depth = 0;
             this.btnKillSteam.HighEmphasis = true;
             this.btnKillSteam.Icon = null;
-            this.btnKillSteam.Location = new System.Drawing.Point(99, 408);
+            this.btnKillSteam.Location = new System.Drawing.Point(125, 408);
             this.btnKillSteam.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnKillSteam.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnKillSteam.MouseState = MaterialSkin.MouseState.HOVER;
@@ -421,11 +427,11 @@
             this.btnKill.Icon = null;
             this.btnKill.Location = new System.Drawing.Point(7, 408);
             this.btnKill.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnKill.MinimumSize = new System.Drawing.Size(90, 0);
+            this.btnKill.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnKill.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnKill.Name = "btnKill";
             this.btnKill.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnKill.Size = new System.Drawing.Size(90, 36);
+            this.btnKill.Size = new System.Drawing.Size(110, 36);
             this.btnKill.TabIndex = 10;
             this.btnKill.Text = "Kill";
             this.btnKill.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -440,7 +446,7 @@
             this.btnRunSteam.Depth = 0;
             this.btnRunSteam.HighEmphasis = true;
             this.btnRunSteam.Icon = null;
-            this.btnRunSteam.Location = new System.Drawing.Point(99, 360);
+            this.btnRunSteam.Location = new System.Drawing.Point(125, 360);
             this.btnRunSteam.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnRunSteam.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnRunSteam.MouseState = MaterialSkin.MouseState.HOVER;
@@ -463,11 +469,11 @@
             this.btnRun.Icon = null;
             this.btnRun.Location = new System.Drawing.Point(7, 360);
             this.btnRun.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
-            this.btnRun.MinimumSize = new System.Drawing.Size(90, 0);
+            this.btnRun.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnRun.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRun.Name = "btnRun";
             this.btnRun.NoAccentTextColor = System.Drawing.Color.Empty;
-            this.btnRun.Size = new System.Drawing.Size(90, 36);
+            this.btnRun.Size = new System.Drawing.Size(110, 36);
             this.btnRun.TabIndex = 9;
             this.btnRun.Text = "Run";
             this.btnRun.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
@@ -475,12 +481,34 @@
             this.btnRun.UseVisualStyleBackColor = true;
             this.btnRun.Click += new System.EventHandler(this.btnRun_Click);
             // 
+            // btnSave
+            // 
+            this.btnSave.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.btnSave.Density = MaterialSkin.Controls.MaterialButton.MaterialButtonDensity.Default;
+            this.btnSave.Depth = 0;
+            this.btnSave.HighEmphasis = true;
+            this.btnSave.Icon = null;
+            this.btnSave.Location = new System.Drawing.Point(8, 312);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
+            this.btnSave.MinimumSize = new System.Drawing.Size(180, 0);
+            this.btnSave.MouseState = MaterialSkin.MouseState.HOVER;
+            this.btnSave.Name = "btnSave";
+            this.btnSave.NoAccentTextColor = System.Drawing.Color.Empty;
+            this.btnSave.Size = new System.Drawing.Size(180, 36);
+            this.btnSave.TabIndex = 22;
+            this.btnSave.Text = "Save";
+            this.btnSave.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
+            this.btnSave.UseAccentColor = false;
+            this.btnSave.UseVisualStyleBackColor = true;
+            this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnRun);
             this.Controls.Add(this.btnRunSteam);
             this.Controls.Add(this.btnKill);
@@ -540,5 +568,6 @@
         private MaterialSkin.Controls.MaterialButton btnKill;
         private MaterialSkin.Controls.MaterialButton btnRunSteam;
         private MaterialSkin.Controls.MaterialButton btnRun;
+        private MaterialSkin.Controls.MaterialButton btnSave;
     }
 }

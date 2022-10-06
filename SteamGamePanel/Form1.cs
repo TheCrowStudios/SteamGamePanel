@@ -25,6 +25,7 @@ namespace SteamGamePanel
         public static int windowHeight;
         public static int keyPressSleep = 50;
         public static bool launching = false;
+        public static bool saved = true;
 
         [DllImport("user32.dll")] static extern bool SetForegroundWindow(IntPtr hWnd);
         [DllImport("user32.dll")] static extern bool SetWindowTextA(IntPtr hWnd, string text);
@@ -65,39 +66,9 @@ namespace SteamGamePanel
             listViewItem.SubItems.Add(txtPassword.Text);
             mlwUsers.Items.Add(listViewItem);
 
-            string[] configuration;
-            
-            using (StreamReader sr = new StreamReader(configFile))
-            {
-                configuration = sr.ReadToEnd().Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-
-            bool usersFound = false;
-            
-            for (var i = 0; i < configuration.Length; i ++)
-            {
-                if (configuration[i].Contains("\"users\": [")) usersFound = true;
-
-                if (usersFound && configuration[i].Contains(']'))
-                {
-                    if (configuration[i - 1][configuration[i - 1].Length - 1] != ',') configuration[i - 1] += $",\n\t\t\"{txtUsername.Text},{txtPassword.Text}\"";
-                    else configuration[i - 1] += $"\n\t\t\"{txtUsername.Text},{txtPassword.Text}\"";
-                }
-            }
-            
-            using (StreamWriter sw = new StreamWriter(configFile))
-            {
-                for (var i = 0; i < configuration.Length; i++)
-                {
-                    sw.WriteLine(configuration[i]);
-                }   
-            }
-
             txtUsername.Text = "";
             txtPassword.Text = "";
-
-            LoadConfig();
-            UpdateSandboxie();
+            SetSaved(false);
         }
 
         private void btnRemoveUser_Click(object sender, EventArgs e)
@@ -106,66 +77,12 @@ namespace SteamGamePanel
 
             if (selected == 0) return;
 
-            string[] configuration;
-            string[] sandboxieConfiguration;
-
-            using (StreamReader sr = new StreamReader(configFile))
-            {
-                configuration = sr.ReadToEnd().Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-
-            using (StreamReader sr = new StreamReader(sandboxieConfigurationFile))
-            {
-                sandboxieConfiguration = sr.ReadToEnd().Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
-            }
-
-            int usersPosition = 0;
-
             for (var i = 0; i < selected; i++)
             {
-                for (var j = usersPosition; j < configuration.Length; j++)
-                {
-                    if (configuration[j].Contains("\"users\": [")) usersPosition = j;
-
-                    if (configuration[j].Contains($"\"{mlwUsers.SelectedItems[0].Text},{mlwUsers.SelectedItems[0].SubItems[1].Text}\"")) configuration[j] = "";
-                }
-
-                bool userFound = false;
-                
-                for (var j = 0; j < sandboxieConfiguration.Length; j++)
-                {
-                    if (sandboxieConfiguration[j].Contains($"[{mlwUsers.SelectedItems[0].Text}]"))
-                    {
-                        sandboxieConfiguration[j] = "";
-                        userFound = true;
-                    }
-
-                    if (userFound && !sandboxieConfiguration[j].Contains('[')) sandboxieConfiguration[j] = "";
-                    else if (userFound) break;
-                }
-
                 mlwUsers.Items.Remove(mlwUsers.SelectedItems[0]);
             }
 
-            using (StreamWriter sw = new StreamWriter(configFile))
-            {
-                for (var i = 0; i < configuration.Length; i++)
-                {
-                    if (configuration[i] != "") sw.WriteLine(configuration[i]);
-                }
-            }
-
-            using (StreamWriter sw = new StreamWriter(sandboxieConfigurationFile, false, Encoding.Unicode))
-            {
-                for (var i = 0; i < sandboxieConfiguration.Length - 1; i++)
-                {
-                    if (sandboxieConfiguration[i] != "") sw.WriteLine(sandboxieConfiguration[i]);
-
-                    if (sandboxieConfiguration[i + 1].Contains('[')) sw.WriteLine();
-                }
-            }
-
-            LoadConfig();
+            SetSaved(false);
         }
 
         private void btnOpenUsersFile_Click(object sender, EventArgs e)
@@ -188,58 +105,77 @@ namespace SteamGamePanel
 
         public void LoadConfig()
         {
-            using (StreamReader sr = new StreamReader(configFile))
+            try
             {
-                string text = sr.ReadToEnd();
-                JsonDocumentOptions jsonDocumentOptions = new JsonDocumentOptions();
-                jsonDocumentOptions.AllowTrailingCommas = true;
-                JsonDocument jsonDocument = JsonDocument.Parse(text, jsonDocumentOptions);
-
-                steamLauncher = jsonDocument.RootElement.GetProperty("steamLauncher").GetString();
-                sdaLauncher = jsonDocument.RootElement.GetProperty("steamDesktopAuthenticator").GetString();
-                sandboxieLauncher = jsonDocument.RootElement.GetProperty("sandboxieLauncher").GetString();
-                sandboxieConfigurationFile = jsonDocument.RootElement.GetProperty("sandboxieConfigurationFile").GetString();
-                screenWidth = jsonDocument.RootElement.GetProperty("screenWidth").GetInt32();
-                screenHeight = jsonDocument.RootElement.GetProperty("screenHeight").GetInt32();
-                windowWidth = jsonDocument.RootElement.GetProperty("windowWidth").GetInt32();
-                windowHeight = jsonDocument.RootElement.GetProperty("windowHeight").GetInt32();
-
-                JsonElement.ArrayEnumerator enumerator = jsonDocument.RootElement.GetProperty("users").EnumerateArray();
-                string usersRead = "";
-
-                for (var i = 0; enumerator.MoveNext(); i++)
+                using (StreamReader sr = new StreamReader(configFile))
                 {
-                    if (usersRead == "") usersRead += $"{enumerator.Current.GetString()}";
-                    else usersRead += $"\n{enumerator.Current.GetString()}";
-                }
+                    string text = sr.ReadToEnd();
+                    JsonDocumentOptions jsonDocumentOptions = new JsonDocumentOptions();
+                    jsonDocumentOptions.AllowTrailingCommas = true;
+                    JsonDocument jsonDocument = JsonDocument.Parse(text, jsonDocumentOptions);
 
-                string[] currentUsers = usersRead.Split('\n');
-                users = new string[currentUsers.Length, 2];
+                    steamLauncher = jsonDocument.RootElement.GetProperty("steamLauncher").GetString();
+                    sdaLauncher = jsonDocument.RootElement.GetProperty("steamDesktopAuthenticator").GetString();
+                    sandboxieLauncher = jsonDocument.RootElement.GetProperty("sandboxieLauncher").GetString();
+                    sandboxieConfigurationFile = jsonDocument.RootElement.GetProperty("sandboxieConfigurationFile").GetString();
+                    screenWidth = jsonDocument.RootElement.GetProperty("screenWidth").GetInt32();
+                    screenHeight = jsonDocument.RootElement.GetProperty("screenHeight").GetInt32();
+                    windowWidth = jsonDocument.RootElement.GetProperty("windowWidth").GetInt32();
+                    windowHeight = jsonDocument.RootElement.GetProperty("windowHeight").GetInt32();
 
-                for (var i = 0; i < currentUsers.Length; i++)
-                {
-                    string[] currentUser = currentUsers[i].Split(',');
-                    users[i, 0] = currentUser[0];
-                    users[i, 1] = currentUser[1];
+                    JsonElement.ArrayEnumerator enumerator = jsonDocument.RootElement.GetProperty("users").EnumerateArray();
+                    string usersRead = "";
+
+
+                    for (var i = 0; enumerator.MoveNext(); i++)
+                    {
+                        if (usersRead == "") usersRead += $"{enumerator.Current.GetString()}";
+                        else usersRead += $"\n{enumerator.Current.GetString()}";
+                    }
+
+                    string[] currentUsers = usersRead.Split('\n');
+                    users = new string[currentUsers.Length, 2];
+
+                    for (var i = 0; i < currentUsers.Length; i++)
+                    {
+                        string[] currentUser = currentUsers[i].Split(',');
+                        users[i, 0] = currentUser[0];
+                        users[i, 1] = currentUser[1];
+                    }
                 }
+            } catch(Exception e)
+            {
+                ShowError(e, true);
             }
 
             mlwUsers.Items.Clear();
-            
-            for (var i = 0; i < users.GetLength(0); i++)
-            {
-                ListViewItem listViewItem = new ListViewItem();
-                listViewItem.Text = users[i, 0];
-                listViewItem.SubItems.Add(users[i, 1]);
 
-                mlwUsers.Items.Add(listViewItem);
+            try
+            {
+                for (var i = 0; i < users.GetLength(0); i++)
+                {
+                    ListViewItem listViewItem = new ListViewItem();
+                    listViewItem.Text = users[i, 0];
+                    listViewItem.SubItems.Add(users[i, 1]);
+
+                    mlwUsers.Items.Add(listViewItem);
+                }
+            } catch(Exception e)
+            {
+                ShowError(e, true);
             }
+
+            if (!File.Exists(steamLauncher)) MaterialMessageBox.Show("Could not find Steam launcher. Check if you have chosen the right file location.", "Uwaga", MessageBoxButtons.OK, false);
+            if (!File.Exists(sdaLauncher)) MaterialMessageBox.Show("Could not find Steam Desktop Authenticator. Check if you have chosen the right file location.", "Uwaga", MessageBoxButtons.OK, false);
+            if (!File.Exists(sandboxieLauncher)) MaterialMessageBox.Show("Could not find Sandboxie. Check if you have chosen the right file location.", "Uwaga", MessageBoxButtons.OK, false);
+            if (!File.Exists(sandboxieConfigurationFile)) MaterialMessageBox.Show("Could not find Sandboxie configuration. Run Sandboxie to create it and check if you have chosen the right file location.", "Uwaga", MessageBoxButtons.OK, false);
 
             txtSteamLauncher.Text = steamLauncher;
             txtSteamDesktopAuthentiator.Text = sdaLauncher;
             txtSandboxieLauncher.Text = sandboxieLauncher;
             txtSandboxieConfigurationFile.Text = sandboxieConfigurationFile;
             mcbResolution.Text = $"{screenWidth}x{screenHeight}";
+            SetSaved(true);
         }
 
         public void UpdateSandboxie()
@@ -368,6 +304,7 @@ namespace SteamGamePanel
             {
                 sda.StartInfo.FileName = sdaLauncher;
                 sda.Start();
+                return;
             }
             else sda = Process.GetProcessesByName("Steam Desktop Authenticator")[0];
 
@@ -376,8 +313,6 @@ namespace SteamGamePanel
             Process[] processes = Process.GetProcessesByName("steam");
 
             int userCount = 0;
-
-            inputSimulator.Keyboard.Sleep(100);
 
             for (var i = 0; i < processes.Length; i++)
             {
@@ -430,6 +365,183 @@ namespace SteamGamePanel
             {
                 SetWindowTextA(processes[i].MainWindowHandle, selectedUsers[i, 0]);
             }
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            string[] configuration;
+            string[] sandboxieConfiguration;
+
+            try
+            {
+                using (StreamReader sr = new StreamReader(configFile))
+                {
+                    configuration = sr.ReadToEnd().Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                }
+
+                using (StreamReader sr = new StreamReader(sandboxieConfigurationFile))
+                {
+                    sandboxieConfiguration = sr.ReadToEnd().Split(new char[] { '\n', '\r' }, StringSplitOptions.RemoveEmptyEntries);
+                }
+            } catch(Exception _e)
+            {
+                ShowError(_e, false);
+                return;
+            }
+
+            bool usersFound = false;
+            int usersLocation = 0;
+
+            for (var i = 0; i < configuration.Length; i++)
+            {
+                if (configuration[i].Contains("steamLauncher")) configuration[i] = $"\t\"steamLauncher\": \"{txtSteamLauncher.Text.Replace("\\", "\\\\")}\",";
+                if (configuration[i].Contains("steamDesktopAuthenticator")) configuration[i] = $"\t\"steamDesktopAuthenticator\": \"{txtSteamDesktopAuthentiator.Text.Replace("\\", "\\\\")}\",";
+                if (configuration[i].Contains("sandboxieLauncher")) configuration[i] = $"\t\"sandboxieLauncher\": \"{txtSandboxieLauncher.Text.Replace("\\", "\\\\")}\",";
+                if (configuration[i].Contains("sandboxieConfigurationFile")) configuration[i] = $"\t\"sandboxieConfigurationFile\": \"{txtSandboxieConfigurationFile.Text.Replace("\\", "\\\\")}\",";
+                if (configuration[i].Contains("\"users\": ["))
+                {
+                    usersFound = true;
+                    usersLocation = i + 1;
+                }
+            }
+
+            try
+            {
+                if (usersFound)
+                {
+                    for (var i = usersLocation; i < configuration.Length; i++)
+                    {
+                        int mlwPosition = i - usersLocation;
+
+                        if (usersFound && configuration[i].Contains(']') && mlwUsers.Items.Count > mlwPosition)
+                        {
+                            do
+                            {
+                                if (configuration[i - 1][configuration[i - 1].Length - 1] != ',') configuration[i - 1] += $",\n\t\t\"{mlwUsers.Items[mlwPosition].SubItems[0].Text},{mlwUsers.Items[mlwPosition].SubItems[1].Text}\"";
+                                else configuration[i - 1] += $"\n\t\t\"{mlwUsers.Items[mlwPosition].SubItems[0].Text},{mlwUsers.Items[mlwPosition].SubItems[1].Text}\",";
+
+                                mlwPosition += 1;
+                            } while (mlwUsers.Items.Count > mlwPosition);
+
+                            break;
+                        }
+                        else if (usersFound && mlwUsers.Items.Count > mlwPosition)
+                        {
+                            if (!configuration[i].Contains($"{mlwUsers.Items[mlwPosition].SubItems[0].Text},{mlwUsers.Items[mlwPosition].SubItems[1].Text}"))
+                            {
+                                bool userFound = false;
+
+                                for (var j = 0; j < sandboxieConfiguration.Length; j++)
+                                {
+                                    if (sandboxieConfiguration[j].Contains($"[{users[mlwPosition, 0]}]"))
+                                    {
+                                        sandboxieConfiguration[j] = "";
+                                        userFound = true;
+                                    }
+
+                                    if (userFound && !sandboxieConfiguration[i].Contains('[')) sandboxieConfiguration[i] = "";
+                                    else if (userFound) break;
+                                }
+                            }
+
+                            configuration[i] = $"\t\t\"{mlwUsers.Items[mlwPosition].SubItems[0].Text},{mlwUsers.Items[mlwPosition].SubItems[1].Text}\",";
+                        }
+                        else if (usersFound)
+                        {
+                            if (configuration[i].Contains(']')) break;
+
+                            bool userFound = false;
+
+                            for (var j = 0; j < sandboxieConfiguration.Length; j++)
+                            {
+                                if (sandboxieConfiguration[j].Contains($"[{users[mlwPosition, 0]}]"))
+                                {
+                                    sandboxieConfiguration[j] = "";
+                                    userFound = true;
+                                }
+
+                                if (userFound && !sandboxieConfiguration[j].Contains('[')) sandboxieConfiguration[j] = "";
+                                else if (userFound) break;
+                            }
+
+                            configuration[i] = "";
+                        }
+                    }
+                }
+            } catch(Exception _e)
+            {
+                ShowError(_e, false);
+                return;
+            }
+
+            try
+            {
+                using (StreamWriter sw = new StreamWriter(configFile))
+                {
+                    for (var i = 0; i < configuration.Length; i++)
+                    {
+                        if (configuration[i] != "") sw.WriteLine(configuration[i]);
+                    }
+                }
+
+                using (StreamWriter sw = new StreamWriter(sandboxieConfigurationFile, false, Encoding.Unicode))
+                {
+                    for (var i = 0; i < sandboxieConfiguration.Length - 1; i++)
+                    {
+                        if (sandboxieConfiguration[i] != "") sw.WriteLine(sandboxieConfiguration[i]);
+
+                        if (sandboxieConfiguration[i + 1].Contains('[')) sw.WriteLine();
+                    }
+
+                    sw.WriteLine();
+                }
+            } catch(Exception _e)
+            {
+                ShowError(_e, false);
+                return;
+            }
+
+            LoadConfig();
+            UpdateSandboxie();
+        }
+
+        public void ShowError(Exception _e, bool _exit)
+        {
+            MaterialMessageBox.Show(_e.ToString(), "Error", MessageBoxButtons.OK, true);
+            if (_exit) Environment.Exit(1);
+        }
+
+        public void SetSaved(bool _saved)
+        {
+            if (!_saved && saved != _saved) this.Text += " - not saved";
+            else if (_saved) this.Text = this.Text.Replace(" - not saved", "");
+            
+            saved = _saved;
+        }
+
+        private void txtSteamLauncher_TextChanged(object sender, EventArgs e)
+        {
+            SetSaved(false);
+        }
+
+        private void txtSteamDesktopAuthentiator_TextChanged(object sender, EventArgs e)
+        {
+            SetSaved(false);
+        }
+
+        private void txtSandboxieLauncher_TextChanged(object sender, EventArgs e)
+        {
+            SetSaved(false);
+        }
+
+        private void txtSandboxieConfigurationFile_TextChanged(object sender, EventArgs e)
+        {
+            SetSaved(false);
+        }
+
+        private void mcbResolution_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            SetSaved(false);
         }
     }
 }
