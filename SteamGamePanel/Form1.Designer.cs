@@ -34,11 +34,12 @@
             this.mlwUsers = new MaterialSkin.Controls.MaterialListView();
             this.chdUsername = new System.Windows.Forms.ColumnHeader();
             this.chdPassword = new System.Windows.Forms.ColumnHeader();
+            this.chdSharedSecret = new System.Windows.Forms.ColumnHeader();
             this.txtUsername = new MaterialSkin.Controls.MaterialTextBox();
             this.btnRemoveUser = new MaterialSkin.Controls.MaterialButton();
             this.txtPassword = new MaterialSkin.Controls.MaterialTextBox();
             this.txtSteamLauncher = new MaterialSkin.Controls.MaterialTextBox();
-            this.txtSteamDesktopAuthentiator = new MaterialSkin.Controls.MaterialTextBox();
+            this.txtMaFileDirectory = new MaterialSkin.Controls.MaterialTextBox();
             this.txtSandboxieLauncher = new MaterialSkin.Controls.MaterialTextBox();
             this.txtSandboxieConfigurationFile = new MaterialSkin.Controls.MaterialTextBox();
             this.tmrSteamGuard = new System.Windows.Forms.Timer(this.components);
@@ -63,7 +64,7 @@
             this.materialLabel1.AutoSize = true;
             this.materialLabel1.Depth = 0;
             this.materialLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel1.Location = new System.Drawing.Point(8, 103);
+            this.materialLabel1.Location = new System.Drawing.Point(8, 95);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
             this.materialLabel1.Size = new System.Drawing.Size(112, 19);
@@ -77,14 +78,14 @@
             this.btnAddUser.Depth = 0;
             this.btnAddUser.HighEmphasis = true;
             this.btnAddUser.Icon = null;
-            this.btnAddUser.Location = new System.Drawing.Point(528, 405);
+            this.btnAddUser.Location = new System.Drawing.Point(528, 397);
             this.btnAddUser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnAddUser.MinimumSize = new System.Drawing.Size(128, 0);
             this.btnAddUser.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnAddUser.Name = "btnAddUser";
             this.btnAddUser.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnAddUser.Size = new System.Drawing.Size(128, 36);
-            this.btnAddUser.TabIndex = 1;
+            this.btnAddUser.TabIndex = 4;
             this.btnAddUser.Text = "Add user";
             this.btnAddUser.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnAddUser.UseAccentColor = false;
@@ -98,7 +99,8 @@
             this.mlwUsers.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.mlwUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chdUsername,
-            this.chdPassword});
+            this.chdPassword,
+            this.chdSharedSecret});
             this.mlwUsers.Depth = 0;
             this.mlwUsers.FullRowSelect = true;
             this.mlwUsers.Location = new System.Drawing.Point(528, 67);
@@ -122,6 +124,11 @@
             this.chdPassword.Text = "Password";
             this.chdPassword.Width = 128;
             // 
+            // chdSharedSecret
+            // 
+            this.chdSharedSecret.Text = "Shared secret";
+            this.chdSharedSecret.Width = 128;
+            // 
             // txtUsername
             // 
             this.txtUsername.AnimateReadOnly = false;
@@ -135,7 +142,7 @@
             this.txtUsername.Multiline = false;
             this.txtUsername.Name = "txtUsername";
             this.txtUsername.Size = new System.Drawing.Size(128, 50);
-            this.txtUsername.TabIndex = 3;
+            this.txtUsername.TabIndex = 2;
             this.txtUsername.Text = "";
             this.txtUsername.TrailingIcon = null;
             // 
@@ -146,7 +153,7 @@
             this.btnRemoveUser.Depth = 0;
             this.btnRemoveUser.HighEmphasis = true;
             this.btnRemoveUser.Icon = null;
-            this.btnRemoveUser.Location = new System.Drawing.Point(666, 405);
+            this.btnRemoveUser.Location = new System.Drawing.Point(666, 397);
             this.btnRemoveUser.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnRemoveUser.MinimumSize = new System.Drawing.Size(128, 0);
             this.btnRemoveUser.MouseState = MaterialSkin.MouseState.HOVER;
@@ -154,6 +161,7 @@
             this.btnRemoveUser.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnRemoveUser.Size = new System.Drawing.Size(128, 36);
             this.btnRemoveUser.TabIndex = 4;
+            this.btnRemoveUser.TabStop = false;
             this.btnRemoveUser.Text = "Remove user";
             this.btnRemoveUser.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnRemoveUser.UseAccentColor = false;
@@ -173,7 +181,7 @@
             this.txtPassword.Multiline = false;
             this.txtPassword.Name = "txtPassword";
             this.txtPassword.Size = new System.Drawing.Size(128, 50);
-            this.txtPassword.TabIndex = 5;
+            this.txtPassword.TabIndex = 3;
             this.txtPassword.Text = "";
             this.txtPassword.TrailingIcon = null;
             // 
@@ -196,24 +204,24 @@
             this.txtSteamLauncher.UseTallSize = false;
             this.txtSteamLauncher.TextChanged += new System.EventHandler(this.txtSteamLauncher_TextChanged);
             // 
-            // txtSteamDesktopAuthentiator
+            // txtMaFileDirectory
             // 
-            this.txtSteamDesktopAuthentiator.AnimateReadOnly = false;
-            this.txtSteamDesktopAuthentiator.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.txtSteamDesktopAuthentiator.Depth = 0;
-            this.txtSteamDesktopAuthentiator.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.txtSteamDesktopAuthentiator.LeadingIcon = null;
-            this.txtSteamDesktopAuthentiator.Location = new System.Drawing.Point(219, 128);
-            this.txtSteamDesktopAuthentiator.MaxLength = 100;
-            this.txtSteamDesktopAuthentiator.MouseState = MaterialSkin.MouseState.OUT;
-            this.txtSteamDesktopAuthentiator.Multiline = false;
-            this.txtSteamDesktopAuthentiator.Name = "txtSteamDesktopAuthentiator";
-            this.txtSteamDesktopAuthentiator.Size = new System.Drawing.Size(283, 36);
-            this.txtSteamDesktopAuthentiator.TabIndex = 14;
-            this.txtSteamDesktopAuthentiator.Text = "";
-            this.txtSteamDesktopAuthentiator.TrailingIcon = null;
-            this.txtSteamDesktopAuthentiator.UseTallSize = false;
-            this.txtSteamDesktopAuthentiator.TextChanged += new System.EventHandler(this.txtSteamDesktopAuthentiator_TextChanged);
+            this.txtMaFileDirectory.AnimateReadOnly = false;
+            this.txtMaFileDirectory.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtMaFileDirectory.Depth = 0;
+            this.txtMaFileDirectory.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtMaFileDirectory.LeadingIcon = null;
+            this.txtMaFileDirectory.Location = new System.Drawing.Point(219, 128);
+            this.txtMaFileDirectory.MaxLength = 100;
+            this.txtMaFileDirectory.MouseState = MaterialSkin.MouseState.OUT;
+            this.txtMaFileDirectory.Multiline = false;
+            this.txtMaFileDirectory.Name = "txtMaFileDirectory";
+            this.txtMaFileDirectory.Size = new System.Drawing.Size(283, 36);
+            this.txtMaFileDirectory.TabIndex = 14;
+            this.txtMaFileDirectory.Text = "";
+            this.txtMaFileDirectory.TrailingIcon = null;
+            this.txtMaFileDirectory.UseTallSize = false;
+            this.txtMaFileDirectory.TextChanged += new System.EventHandler(this.txtSteamDesktopAuthentiator_TextChanged);
             // 
             // txtSandboxieLauncher
             // 
@@ -291,19 +299,19 @@
             this.materialLabel2.AutoSize = true;
             this.materialLabel2.Depth = 0;
             this.materialLabel2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel2.Location = new System.Drawing.Point(8, 145);
+            this.materialLabel2.Location = new System.Drawing.Point(8, 137);
             this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel2.Name = "materialLabel2";
-            this.materialLabel2.Size = new System.Drawing.Size(205, 19);
+            this.materialLabel2.Size = new System.Drawing.Size(114, 19);
             this.materialLabel2.TabIndex = 18;
-            this.materialLabel2.Text = "Steam desktop authenticator";
+            this.materialLabel2.Text = "maFile directory";
             // 
             // materialLabel3
             // 
             this.materialLabel3.AutoSize = true;
             this.materialLabel3.Depth = 0;
             this.materialLabel3.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel3.Location = new System.Drawing.Point(8, 187);
+            this.materialLabel3.Location = new System.Drawing.Point(8, 179);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
             this.materialLabel3.Size = new System.Drawing.Size(141, 19);
@@ -315,7 +323,7 @@
             this.materialLabel4.AutoSize = true;
             this.materialLabel4.Depth = 0;
             this.materialLabel4.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel4.Location = new System.Drawing.Point(8, 229);
+            this.materialLabel4.Location = new System.Drawing.Point(8, 221);
             this.materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel4.Name = "materialLabel4";
             this.materialLabel4.Size = new System.Drawing.Size(201, 19);
@@ -327,7 +335,7 @@
             this.materialLabel5.AutoSize = true;
             this.materialLabel5.Depth = 0;
             this.materialLabel5.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel5.Location = new System.Drawing.Point(8, 284);
+            this.materialLabel5.Location = new System.Drawing.Point(8, 276);
             this.materialLabel5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel5.Name = "materialLabel5";
             this.materialLabel5.Size = new System.Drawing.Size(123, 19);
@@ -341,7 +349,7 @@
             this.btnOpenUsersFile.Depth = 0;
             this.btnOpenUsersFile.HighEmphasis = true;
             this.btnOpenUsersFile.Icon = null;
-            this.btnOpenUsersFile.Location = new System.Drawing.Point(245, 360);
+            this.btnOpenUsersFile.Location = new System.Drawing.Point(245, 352);
             this.btnOpenUsersFile.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnOpenUsersFile.MinimumSize = new System.Drawing.Size(180, 0);
             this.btnOpenUsersFile.MouseState = MaterialSkin.MouseState.HOVER;
@@ -349,6 +357,7 @@
             this.btnOpenUsersFile.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnOpenUsersFile.Size = new System.Drawing.Size(180, 36);
             this.btnOpenUsersFile.TabIndex = 7;
+            this.btnOpenUsersFile.TabStop = false;
             this.btnOpenUsersFile.Text = "Open users file";
             this.btnOpenUsersFile.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnOpenUsersFile.UseAccentColor = false;
@@ -362,7 +371,7 @@
             this.btnAddUsersFromFile.Depth = 0;
             this.btnAddUsersFromFile.HighEmphasis = true;
             this.btnAddUsersFromFile.Icon = null;
-            this.btnAddUsersFromFile.Location = new System.Drawing.Point(245, 408);
+            this.btnAddUsersFromFile.Location = new System.Drawing.Point(245, 400);
             this.btnAddUsersFromFile.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnAddUsersFromFile.MinimumSize = new System.Drawing.Size(180, 0);
             this.btnAddUsersFromFile.MouseState = MaterialSkin.MouseState.HOVER;
@@ -370,6 +379,7 @@
             this.btnAddUsersFromFile.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnAddUsersFromFile.Size = new System.Drawing.Size(180, 36);
             this.btnAddUsersFromFile.TabIndex = 6;
+            this.btnAddUsersFromFile.TabStop = false;
             this.btnAddUsersFromFile.Text = "Add users from file";
             this.btnAddUsersFromFile.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnAddUsersFromFile.UseAccentColor = false;
@@ -383,7 +393,7 @@
             this.btnReloadConfig.Depth = 0;
             this.btnReloadConfig.HighEmphasis = true;
             this.btnReloadConfig.Icon = null;
-            this.btnReloadConfig.Location = new System.Drawing.Point(245, 312);
+            this.btnReloadConfig.Location = new System.Drawing.Point(245, 304);
             this.btnReloadConfig.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnReloadConfig.MinimumSize = new System.Drawing.Size(180, 0);
             this.btnReloadConfig.MouseState = MaterialSkin.MouseState.HOVER;
@@ -391,6 +401,7 @@
             this.btnReloadConfig.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnReloadConfig.Size = new System.Drawing.Size(180, 36);
             this.btnReloadConfig.TabIndex = 8;
+            this.btnReloadConfig.TabStop = false;
             this.btnReloadConfig.Text = "Reload config";
             this.btnReloadConfig.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnReloadConfig.UseAccentColor = false;
@@ -404,14 +415,14 @@
             this.btnKillSteam.Depth = 0;
             this.btnKillSteam.HighEmphasis = true;
             this.btnKillSteam.Icon = null;
-            this.btnKillSteam.Location = new System.Drawing.Point(125, 408);
+            this.btnKillSteam.Location = new System.Drawing.Point(125, 400);
             this.btnKillSteam.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnKillSteam.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnKillSteam.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnKillSteam.Name = "btnKillSteam";
             this.btnKillSteam.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnKillSteam.Size = new System.Drawing.Size(110, 36);
-            this.btnKillSteam.TabIndex = 11;
+            this.btnKillSteam.TabIndex = 7;
             this.btnKillSteam.Text = "Kill steam";
             this.btnKillSteam.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnKillSteam.UseAccentColor = false;
@@ -425,14 +436,14 @@
             this.btnKill.Depth = 0;
             this.btnKill.HighEmphasis = true;
             this.btnKill.Icon = null;
-            this.btnKill.Location = new System.Drawing.Point(7, 408);
+            this.btnKill.Location = new System.Drawing.Point(7, 400);
             this.btnKill.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnKill.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnKill.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnKill.Name = "btnKill";
             this.btnKill.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnKill.Size = new System.Drawing.Size(110, 36);
-            this.btnKill.TabIndex = 10;
+            this.btnKill.TabIndex = 6;
             this.btnKill.Text = "Kill";
             this.btnKill.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnKill.UseAccentColor = false;
@@ -446,14 +457,14 @@
             this.btnRunSteam.Depth = 0;
             this.btnRunSteam.HighEmphasis = true;
             this.btnRunSteam.Icon = null;
-            this.btnRunSteam.Location = new System.Drawing.Point(125, 360);
+            this.btnRunSteam.Location = new System.Drawing.Point(125, 352);
             this.btnRunSteam.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnRunSteam.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnRunSteam.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRunSteam.Name = "btnRunSteam";
             this.btnRunSteam.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnRunSteam.Size = new System.Drawing.Size(110, 36);
-            this.btnRunSteam.TabIndex = 12;
+            this.btnRunSteam.TabIndex = 1;
             this.btnRunSteam.Text = "Run steam";
             this.btnRunSteam.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnRunSteam.UseAccentColor = false;
@@ -467,14 +478,14 @@
             this.btnRun.Depth = 0;
             this.btnRun.HighEmphasis = true;
             this.btnRun.Icon = null;
-            this.btnRun.Location = new System.Drawing.Point(7, 360);
+            this.btnRun.Location = new System.Drawing.Point(7, 352);
             this.btnRun.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnRun.MinimumSize = new System.Drawing.Size(110, 0);
             this.btnRun.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnRun.Name = "btnRun";
             this.btnRun.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnRun.Size = new System.Drawing.Size(110, 36);
-            this.btnRun.TabIndex = 9;
+            this.btnRun.TabIndex = 0;
             this.btnRun.Text = "Run";
             this.btnRun.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnRun.UseAccentColor = false;
@@ -488,14 +499,14 @@
             this.btnSave.Depth = 0;
             this.btnSave.HighEmphasis = true;
             this.btnSave.Icon = null;
-            this.btnSave.Location = new System.Drawing.Point(8, 312);
+            this.btnSave.Location = new System.Drawing.Point(8, 304);
             this.btnSave.Margin = new System.Windows.Forms.Padding(4, 6, 4, 6);
             this.btnSave.MinimumSize = new System.Drawing.Size(180, 0);
             this.btnSave.MouseState = MaterialSkin.MouseState.HOVER;
             this.btnSave.Name = "btnSave";
             this.btnSave.NoAccentTextColor = System.Drawing.Color.Empty;
             this.btnSave.Size = new System.Drawing.Size(180, 36);
-            this.btnSave.TabIndex = 22;
+            this.btnSave.TabIndex = 5;
             this.btnSave.Text = "Save";
             this.btnSave.Type = MaterialSkin.Controls.MaterialButton.MaterialButtonType.Contained;
             this.btnSave.UseAccentColor = false;
@@ -523,7 +534,7 @@
             this.Controls.Add(this.mcbResolution);
             this.Controls.Add(this.txtSandboxieConfigurationFile);
             this.Controls.Add(this.txtSandboxieLauncher);
-            this.Controls.Add(this.txtSteamDesktopAuthentiator);
+            this.Controls.Add(this.txtMaFileDirectory);
             this.Controls.Add(this.txtSteamLauncher);
             this.Controls.Add(this.txtPassword);
             this.Controls.Add(this.btnRemoveUser);
@@ -551,7 +562,7 @@
         private ColumnHeader chdPassword;
         private MaterialSkin.Controls.MaterialButton materialButton1;
         private MaterialSkin.Controls.MaterialTextBox txtSteamLauncher;
-        private MaterialSkin.Controls.MaterialTextBox txtSteamDesktopAuthentiator;
+        private MaterialSkin.Controls.MaterialTextBox txtMaFileDirectory;
         private MaterialSkin.Controls.MaterialTextBox txtSandboxieLauncher;
         private MaterialSkin.Controls.MaterialTextBox txtSandboxieConfigurationFile;
         private System.Windows.Forms.Timer tmrSteamGuard;
@@ -569,5 +580,6 @@
         private MaterialSkin.Controls.MaterialButton btnRunSteam;
         private MaterialSkin.Controls.MaterialButton btnRun;
         private MaterialSkin.Controls.MaterialButton btnSave;
+        private ColumnHeader chdSharedSecret;
     }
 }
