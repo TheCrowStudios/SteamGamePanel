@@ -19,3 +19,9 @@ Panel for farming CSGO cases
 - When the configuration is reloaded the maFiles from the specified directory will be copied into the working directory of the program
 - If a user does not have Steam guard linked the user will be able to be launched without a maFile
 - If a user has Steam guard linked to the account, when logging in the program will generate a log in code and fill it in
+
+## Running CSGO
+- You need to specify an IP and port for the server you want to connect to in the IP port configuration in the GUI and save
+- You are able to select the accounts you want to launch by selecting them in the list view
+- Press Run Steam to launch Steam and log in to each account
+- Press Run to log in to Steam and launch CSGO for each account
