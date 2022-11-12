@@ -35,6 +35,7 @@
             this.chdUsername = new System.Windows.Forms.ColumnHeader();
             this.chdPassword = new System.Windows.Forms.ColumnHeader();
             this.chdSharedSecret = new System.Windows.Forms.ColumnHeader();
+            this.chdSteamID = new System.Windows.Forms.ColumnHeader();
             this.txtUsername = new MaterialSkin.Controls.MaterialTextBox();
             this.btnRemoveUser = new MaterialSkin.Controls.MaterialButton();
             this.txtPassword = new MaterialSkin.Controls.MaterialTextBox();
@@ -57,6 +58,8 @@
             this.btnRunSteam = new MaterialSkin.Controls.MaterialButton();
             this.btnRun = new MaterialSkin.Controls.MaterialButton();
             this.btnSave = new MaterialSkin.Controls.MaterialButton();
+            this.txtIpPort = new MaterialSkin.Controls.MaterialTextBox();
+            this.materialLabel6 = new MaterialSkin.Controls.MaterialLabel();
             this.SuspendLayout();
             // 
             // materialLabel1
@@ -64,7 +67,7 @@
             this.materialLabel1.AutoSize = true;
             this.materialLabel1.Depth = 0;
             this.materialLabel1.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel1.Location = new System.Drawing.Point(8, 95);
+            this.materialLabel1.Location = new System.Drawing.Point(8, 64);
             this.materialLabel1.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel1.Name = "materialLabel1";
             this.materialLabel1.Size = new System.Drawing.Size(112, 19);
@@ -100,7 +103,8 @@
             this.mlwUsers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.chdUsername,
             this.chdPassword,
-            this.chdSharedSecret});
+            this.chdSharedSecret,
+            this.chdSteamID});
             this.mlwUsers.Depth = 0;
             this.mlwUsers.FullRowSelect = true;
             this.mlwUsers.Location = new System.Drawing.Point(528, 67);
@@ -128,6 +132,11 @@
             // 
             this.chdSharedSecret.Text = "Shared secret";
             this.chdSharedSecret.Width = 128;
+            // 
+            // chdSteamID
+            // 
+            this.chdSteamID.Text = "Steam ID";
+            this.chdSteamID.Width = 128;
             // 
             // txtUsername
             // 
@@ -192,12 +201,12 @@
             this.txtSteamLauncher.Depth = 0;
             this.txtSteamLauncher.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtSteamLauncher.LeadingIcon = null;
-            this.txtSteamLauncher.Location = new System.Drawing.Point(219, 86);
+            this.txtSteamLauncher.Location = new System.Drawing.Point(8, 86);
             this.txtSteamLauncher.MaxLength = 100;
             this.txtSteamLauncher.MouseState = MaterialSkin.MouseState.OUT;
             this.txtSteamLauncher.Multiline = false;
             this.txtSteamLauncher.Name = "txtSteamLauncher";
-            this.txtSteamLauncher.Size = new System.Drawing.Size(283, 36);
+            this.txtSteamLauncher.Size = new System.Drawing.Size(227, 36);
             this.txtSteamLauncher.TabIndex = 13;
             this.txtSteamLauncher.Text = "";
             this.txtSteamLauncher.TrailingIcon = null;
@@ -211,12 +220,12 @@
             this.txtMaFileDirectory.Depth = 0;
             this.txtMaFileDirectory.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtMaFileDirectory.LeadingIcon = null;
-            this.txtMaFileDirectory.Location = new System.Drawing.Point(219, 128);
+            this.txtMaFileDirectory.Location = new System.Drawing.Point(8, 143);
             this.txtMaFileDirectory.MaxLength = 100;
             this.txtMaFileDirectory.MouseState = MaterialSkin.MouseState.OUT;
             this.txtMaFileDirectory.Multiline = false;
             this.txtMaFileDirectory.Name = "txtMaFileDirectory";
-            this.txtMaFileDirectory.Size = new System.Drawing.Size(283, 36);
+            this.txtMaFileDirectory.Size = new System.Drawing.Size(227, 36);
             this.txtMaFileDirectory.TabIndex = 14;
             this.txtMaFileDirectory.Text = "";
             this.txtMaFileDirectory.TrailingIcon = null;
@@ -230,12 +239,12 @@
             this.txtSandboxieLauncher.Depth = 0;
             this.txtSandboxieLauncher.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtSandboxieLauncher.LeadingIcon = null;
-            this.txtSandboxieLauncher.Location = new System.Drawing.Point(219, 170);
+            this.txtSandboxieLauncher.Location = new System.Drawing.Point(8, 204);
             this.txtSandboxieLauncher.MaxLength = 100;
             this.txtSandboxieLauncher.MouseState = MaterialSkin.MouseState.OUT;
             this.txtSandboxieLauncher.Multiline = false;
             this.txtSandboxieLauncher.Name = "txtSandboxieLauncher";
-            this.txtSandboxieLauncher.Size = new System.Drawing.Size(283, 36);
+            this.txtSandboxieLauncher.Size = new System.Drawing.Size(227, 36);
             this.txtSandboxieLauncher.TabIndex = 15;
             this.txtSandboxieLauncher.Text = "";
             this.txtSandboxieLauncher.TrailingIcon = null;
@@ -249,12 +258,12 @@
             this.txtSandboxieConfigurationFile.Depth = 0;
             this.txtSandboxieConfigurationFile.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
             this.txtSandboxieConfigurationFile.LeadingIcon = null;
-            this.txtSandboxieConfigurationFile.Location = new System.Drawing.Point(219, 212);
+            this.txtSandboxieConfigurationFile.Location = new System.Drawing.Point(8, 259);
             this.txtSandboxieConfigurationFile.MaxLength = 100;
             this.txtSandboxieConfigurationFile.MouseState = MaterialSkin.MouseState.OUT;
             this.txtSandboxieConfigurationFile.Multiline = false;
             this.txtSandboxieConfigurationFile.Name = "txtSandboxieConfigurationFile";
-            this.txtSandboxieConfigurationFile.Size = new System.Drawing.Size(283, 36);
+            this.txtSandboxieConfigurationFile.Size = new System.Drawing.Size(227, 36);
             this.txtSandboxieConfigurationFile.TabIndex = 16;
             this.txtSandboxieConfigurationFile.Text = "";
             this.txtSandboxieConfigurationFile.TrailingIcon = null;
@@ -275,23 +284,24 @@
             this.mcbResolution.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
             this.mcbResolution.Depth = 0;
             this.mcbResolution.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawVariable;
-            this.mcbResolution.DropDownHeight = 174;
+            this.mcbResolution.DropDownHeight = 118;
             this.mcbResolution.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.mcbResolution.DropDownWidth = 121;
             this.mcbResolution.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Pixel);
             this.mcbResolution.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(222)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
             this.mcbResolution.FormattingEnabled = true;
             this.mcbResolution.IntegralHeight = false;
-            this.mcbResolution.ItemHeight = 43;
+            this.mcbResolution.ItemHeight = 29;
             this.mcbResolution.Items.AddRange(new object[] {
             "1920x1080"});
-            this.mcbResolution.Location = new System.Drawing.Point(219, 254);
+            this.mcbResolution.Location = new System.Drawing.Point(245, 260);
             this.mcbResolution.MaxDropDownItems = 4;
             this.mcbResolution.MouseState = MaterialSkin.MouseState.OUT;
             this.mcbResolution.Name = "mcbResolution";
-            this.mcbResolution.Size = new System.Drawing.Size(176, 49);
+            this.mcbResolution.Size = new System.Drawing.Size(176, 35);
             this.mcbResolution.StartIndex = 0;
             this.mcbResolution.TabIndex = 17;
+            this.mcbResolution.UseTallSize = false;
             this.mcbResolution.SelectedIndexChanged += new System.EventHandler(this.mcbResolution_SelectedIndexChanged);
             // 
             // materialLabel2
@@ -299,7 +309,7 @@
             this.materialLabel2.AutoSize = true;
             this.materialLabel2.Depth = 0;
             this.materialLabel2.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel2.Location = new System.Drawing.Point(8, 137);
+            this.materialLabel2.Location = new System.Drawing.Point(8, 121);
             this.materialLabel2.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel2.Name = "materialLabel2";
             this.materialLabel2.Size = new System.Drawing.Size(114, 19);
@@ -311,7 +321,7 @@
             this.materialLabel3.AutoSize = true;
             this.materialLabel3.Depth = 0;
             this.materialLabel3.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel3.Location = new System.Drawing.Point(8, 179);
+            this.materialLabel3.Location = new System.Drawing.Point(8, 182);
             this.materialLabel3.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel3.Name = "materialLabel3";
             this.materialLabel3.Size = new System.Drawing.Size(141, 19);
@@ -323,7 +333,7 @@
             this.materialLabel4.AutoSize = true;
             this.materialLabel4.Depth = 0;
             this.materialLabel4.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel4.Location = new System.Drawing.Point(8, 221);
+            this.materialLabel4.Location = new System.Drawing.Point(8, 237);
             this.materialLabel4.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel4.Name = "materialLabel4";
             this.materialLabel4.Size = new System.Drawing.Size(201, 19);
@@ -335,7 +345,7 @@
             this.materialLabel5.AutoSize = true;
             this.materialLabel5.Depth = 0;
             this.materialLabel5.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
-            this.materialLabel5.Location = new System.Drawing.Point(8, 276);
+            this.materialLabel5.Location = new System.Drawing.Point(245, 238);
             this.materialLabel5.MouseState = MaterialSkin.MouseState.HOVER;
             this.materialLabel5.Name = "materialLabel5";
             this.materialLabel5.Size = new System.Drawing.Size(123, 19);
@@ -513,12 +523,45 @@
             this.btnSave.UseVisualStyleBackColor = true;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
+            // txtIpPort
+            // 
+            this.txtIpPort.AnimateReadOnly = false;
+            this.txtIpPort.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtIpPort.Depth = 0;
+            this.txtIpPort.Font = new System.Drawing.Font("Roboto", 16F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.txtIpPort.LeadingIcon = null;
+            this.txtIpPort.Location = new System.Drawing.Point(245, 86);
+            this.txtIpPort.MaxLength = 100;
+            this.txtIpPort.MouseState = MaterialSkin.MouseState.OUT;
+            this.txtIpPort.Multiline = false;
+            this.txtIpPort.Name = "txtIpPort";
+            this.txtIpPort.Size = new System.Drawing.Size(227, 36);
+            this.txtIpPort.TabIndex = 23;
+            this.txtIpPort.Text = "";
+            this.txtIpPort.TrailingIcon = null;
+            this.txtIpPort.UseTallSize = false;
+            this.txtIpPort.TextChanged += new System.EventHandler(this.txtIpPort_TextChanged);
+            // 
+            // materialLabel6
+            // 
+            this.materialLabel6.AutoSize = true;
+            this.materialLabel6.Depth = 0;
+            this.materialLabel6.Font = new System.Drawing.Font("Roboto", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Pixel);
+            this.materialLabel6.Location = new System.Drawing.Point(245, 64);
+            this.materialLabel6.MouseState = MaterialSkin.MouseState.HOVER;
+            this.materialLabel6.Name = "materialLabel6";
+            this.materialLabel6.Size = new System.Drawing.Size(47, 19);
+            this.materialLabel6.TabIndex = 22;
+            this.materialLabel6.Text = "IP:port";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.txtIpPort);
+            this.Controls.Add(this.materialLabel6);
             this.Controls.Add(this.btnSave);
             this.Controls.Add(this.btnRun);
             this.Controls.Add(this.btnRunSteam);
@@ -581,5 +624,8 @@
         private MaterialSkin.Controls.MaterialButton btnRun;
         private MaterialSkin.Controls.MaterialButton btnSave;
         private ColumnHeader chdSharedSecret;
+        private MaterialSkin.Controls.MaterialTextBox txtIpPort;
+        private MaterialSkin.Controls.MaterialLabel materialLabel6;
+        private ColumnHeader chdSteamID;
     }
 }

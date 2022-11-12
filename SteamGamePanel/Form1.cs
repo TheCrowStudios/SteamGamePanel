@@ -17,13 +17,16 @@ namespace SteamGamePanel
     {
         public static string configFile = "config.json";
         public static string maFileDirectory = "maFiles";
+        public static string steamInventoryHttpRequest = "http://steamcommunity.com/inventory/<PROFILEID>/730/2?l=english&count=5000";
         public static string[] maFiles;
-        public static string[,] users;
-        public static string[,] selectedUsers;
+        public static SteamUser[] users;
+        public static SteamUser[] selectedUsers;
         public static string steamLauncher;
         public static string maFileDirectoryToCopy;
         public static string sandboxieLauncher;
         public static string sandboxieConfigurationFile;
+        public static string ip;
+        public static string port;
         public static int screenWidth;
         public static int screenHeight;
         public static int windowWidth;
@@ -34,7 +37,6 @@ namespace SteamGamePanel
         public static bool setup = false;
 
         [DllImport("user32.dll")] static extern bool SetForegroundWindow(IntPtr hWnd);
-        [DllImport("user32.dll")] static extern bool SetWindowTextA(IntPtr hWnd, string text);
 
         public Form1()
         {
@@ -60,7 +62,7 @@ namespace SteamGamePanel
                 else sandboxieConfigurationFile = "";
 
                 using (FileStream fs = File.Create(configFile)) { }
-                using (StreamWriter sw = new StreamWriter(configFile)) sw.Write($"{{\n\t\"steamLauncher\": \"{steamLauncher}\",\n\t\"maFileDirectory\": \"\",\n\t\"sandboxieLauncher\": \"{sandboxieLauncher}\",\n\t\"sandboxieConfigurationFile\": \"{sandboxieConfigurationFile}\",\n\t\"screenWidth\": 1920,\n\t\"screenHeight\": 1080,\n\t\"windowWidth\": 640,\n\t\"windowHeight\": 480,\n\t\"users\": [\n\t\t\"buckflacks1987,Illuminati8888!\",\n\t\t\"embodyingocean,Illuminati8888!\"\n\t]\n}}");
+                using (StreamWriter sw = new StreamWriter(configFile)) sw.Write($"{{\n\t\"steamLauncher\": \"{steamLauncher}\",\n\t\"maFileDirectory\": \"\",\n\t\"sandboxieLauncher\": \"{sandboxieLauncher}\",\n\t\"sandboxieConfigurationFile\": \"{sandboxieConfigurationFile}\",\n\t\"ipPort\": \"\"\n\t\"screenWidth\": 1920,\n\t\"screenHeight\": 1080,\n\t\"windowWidth\": 640,\n\t\"windowHeight\": 480,\n\t\"users\": [\n\t\t\"buckflacks1987,Illuminati8888!\",\n\t\t\"embodyingocean,Illuminati8888!\"\n\t]\n}}");
 
                 setup = true;
             }
@@ -68,6 +70,7 @@ namespace SteamGamePanel
             if (!Directory.Exists(maFileDirectory)) Directory.CreateDirectory(maFileDirectory);
 
             LoadConfig();
+            FilesExist(true);
             UpdateSandboxie();
         }
 
@@ -137,6 +140,8 @@ namespace SteamGamePanel
                     maFileDirectoryToCopy = jsonDocument.RootElement.GetProperty("maFileDirectory").GetString();
                     sandboxieLauncher = jsonDocument.RootElement.GetProperty("sandboxieLauncher").GetString();
                     sandboxieConfigurationFile = jsonDocument.RootElement.GetProperty("sandboxieConfigurationFile").GetString();
+                    ip = jsonDocument.RootElement.GetProperty("ipPort").GetString().Split(':')[0];
+                    port = jsonDocument.RootElement.GetProperty("ipPort").GetString().Split(':')[1];
                     screenWidth = jsonDocument.RootElement.GetProperty("screenWidth").GetInt32();
                     screenHeight = jsonDocument.RootElement.GetProperty("screenHeight").GetInt32();
                     windowWidth = jsonDocument.RootElement.GetProperty("windowWidth").GetInt32();
@@ -152,16 +157,13 @@ namespace SteamGamePanel
                     }
 
                     string[] currentUsers = usersRead.Split('\n');
-                    users = new string[currentUsers.Length, 3];
+                    users = new SteamUser[currentUsers.Length];
 
                     for (var i = 0; i < currentUsers.Length; i++)
                     {
                         string[] currentUser = currentUsers[i].Split(',');
 
-                        for (var j = 0; j < currentUser.Length; j++)
-                        {
-                            users[i, j] = currentUser[j];
-                        }
+                        users[i] = new SteamUser(currentUser);
                     }
                 }
 
@@ -194,9 +196,10 @@ namespace SteamGamePanel
 
                         for (var j = 0; j < users.GetLength(0); j++)
                         {
-                            if (users[j, 0] == username)
+                            if (users[j].Username == username)
                             {
-                                users[j, 2] = jsonDocument.RootElement.GetProperty("shared_secret").GetString();
+                                users[j].SharedSecret = jsonDocument.RootElement.GetProperty("shared_secret").GetString();
+                                users[j].SteamID = jsonDocument.RootElement.GetProperty("Session").GetProperty("SteamID").GetInt64().ToString();
                                 break;
                             }
                         }
@@ -214,11 +217,12 @@ namespace SteamGamePanel
                 for (var i = 0; i < users.GetLength(0); i++)
                 {
                     ListViewItem listViewItem = new ListViewItem();
+                    string[] userArgs = users[i].GetUserArgs();
                     
                     for (var j = 0; j < mlwUsers.Columns.Count; j ++)
                     {
-                        if (j == 0) listViewItem.Text = users[i, j];
-                        else listViewItem.SubItems.Add(users[i, j]);
+                        if (j == 0) listViewItem.Text = users[i].Username;
+                        else listViewItem.SubItems.Add(userArgs[j]);
                     }
 
                     mlwUsers.Items.Add(listViewItem);
@@ -228,15 +232,11 @@ namespace SteamGamePanel
                 ShowError(e, true);
             }
 
-            if (!File.Exists(steamLauncher)) MaterialMessageBox.Show("Could not find Steam launcher. Check if you have Steam installed.", "Uwaga", MessageBoxButtons.OK, false);
-            if (!Directory.Exists(maFileDirectoryToCopy)) MaterialMessageBox.Show("Could not find the maFile directory. Check if you have chosen the right file location.", "Uwaga", MessageBoxButtons.OK, false);
-            if (!File.Exists(sandboxieLauncher)) MaterialMessageBox.Show("Could not find Sandboxie. Check if you have chosen the right file location.", "Uwaga", MessageBoxButtons.OK, false);
-            if (!File.Exists(sandboxieConfigurationFile)) MaterialMessageBox.Show("Could not find Sandboxie configuration. Run Sandboxie to create it and check if you have chosen the right file location.", "Uwaga", MessageBoxButtons.OK, false);
-
             txtSteamLauncher.Text = steamLauncher;
             txtMaFileDirectory.Text = maFileDirectoryToCopy;
             txtSandboxieLauncher.Text = sandboxieLauncher;
             txtSandboxieConfigurationFile.Text = sandboxieConfigurationFile;
+            txtIpPort.Text = $"{ip}:{port}";
             mcbResolution.Text = $"{screenWidth}x{screenHeight}";
             SetSaved(true);
         }
@@ -256,9 +256,9 @@ namespace SteamGamePanel
                 {
                     for (var i = 0; i < users.GetLength(0); i++)
                     {
-                        if (!configuration.Contains($"[{users[i, 0]}]"))
+                        if (!configuration.Contains($"[{users[i].Username}]"))
                         {
-                            sw.WriteLine($"[{users[i, 0]}]\nEnabled=y\nBlockNetworkFiles=y\nRecoverFolder=%{{374DE290-123F-4565-9164-39C4925E467B}}%\nRecoverFolder=%Personal%\nRecoverFolder=%Desktop%\nBorderColor=#02f6f6,ttl\nTemplate=OpenBluetooth\nTemplate=SkipHook\nTemplate=FileCopy\nTemplate=qWave\nTemplate=BlockPorts\nTemplate=LingerPrograms\nTemplate=AutoRecoverIgnore\nConfigLevel=9\nAutoRecover=y\nUseSecurityMode=n\nUsePrivacyMode=n\nOpenPipePath=D:\\SteamLibrary\n");
+                            sw.WriteLine($"[{users[i].Username}]\nEnabled=y\nBlockNetworkFiles=y\nRecoverFolder=%{{374DE290-123F-4565-9164-39C4925E467B}}%\nRecoverFolder=%Personal%\nRecoverFolder=%Desktop%\nBorderColor=#02f6f6,ttl\nTemplate=OpenBluetooth\nTemplate=SkipHook\nTemplate=FileCopy\nTemplate=qWave\nTemplate=BlockPorts\nTemplate=LingerPrograms\nTemplate=AutoRecoverIgnore\nConfigLevel=9\nAutoRecover=y\nUseSecurityMode=n\nUsePrivacyMode=n\nOpenPipePath=D:\\SteamLibrary\n");
                         }
                     }
                 }
@@ -306,26 +306,33 @@ namespace SteamGamePanel
 
             if (mlwUsers.SelectedItems.Count == 0)
             {
-                selectedUsers = new string[mlwUsers.Items.Count, 3];
+                selectedUsers = new SteamUser[mlwUsers.Items.Count];
 
-                for (var i = 0; i < selectedUsers.GetLength(0); i++)
+                for (var i = 0; i < selectedUsers.Length; i++)
                 {
+                    string[] userArgs = new string[mlwUsers.Items[i].SubItems.Count];
+                    
                     for (var j = 0; j < mlwUsers.Items[i].SubItems.Count; j++)
                     {
-                        selectedUsers[i, j] = mlwUsers.Items[i].SubItems[j].Text;
+                        userArgs[j] = mlwUsers.Items[i].SubItems[j].Text;
                     }
+
+                    selectedUsers[i] = new SteamUser(userArgs);
                 }
             } else
             {
-                selectedUsers = new string[mlwUsers.SelectedItems.Count, 2];
+                selectedUsers = new SteamUser[mlwUsers.SelectedItems.Count];
 
                 for (var i = 0; i < selectedUsers.GetLength(0); i++)
                 {
+                    string[] userArgs = new string[mlwUsers.Items[i].SubItems.Count];
+                    
                     for (var j = 0; j < mlwUsers.Items[i].SubItems.Count; j++)
                     {
-                        selectedUsers[i, j] = mlwUsers.SelectedItems[i].SubItems[j].Text;
+                        userArgs[j] = mlwUsers.SelectedItems[i].SubItems[j].Text;
                     }
 
+                    selectedUsers[i] = new SteamUser(userArgs);
                 }
             }
             
@@ -337,8 +344,8 @@ namespace SteamGamePanel
             for (var i = 0; i < selectedUsers.GetLength(0); i++)
             {
                 sandboxie.StartInfo.FileName = sandboxieLauncher;
-                sandboxie.StartInfo.Arguments = $"/box:{selectedUsers[i, 0]} {steamLauncher} -login {selectedUsers[i, 0]} {selectedUsers[i, 1]} ";
-                if (_launchCsgo) sandboxie.StartInfo.Arguments += $"-applaunch 730 -sw -w {windowWidth} -h {windowHeight} -x {50 + i * windowWidth} -y {heightUsed + 50} +sv_upload +connect 86.14.115.126 +port 27015";
+                sandboxie.StartInfo.Arguments = $"/box:{selectedUsers[i].Username} {steamLauncher} -noreactlogin -login {selectedUsers[i].Username} {selectedUsers[i].Password} ";
+                if (_launchCsgo) sandboxie.StartInfo.Arguments += $"-applaunch 730 -sw -w {windowWidth} -h {windowHeight} -x {50 + i * windowWidth} -y {heightUsed + 50} +sv_upload +connect {ip} +port {port}";
                 widthUsed += windowWidth + 50;
 
                 if (widthUsed + windowWidth + 50 > screenWidth)
@@ -349,6 +356,9 @@ namespace SteamGamePanel
 
                 sandboxie.StartInfo.UseShellExecute = true;
                 sandboxie.Start();
+                selectedUsers[i].GameProcess = sandboxie;
+
+                GetUserInvetory(i);
             }
 
             EnterSteamGuard();
@@ -380,10 +390,10 @@ namespace SteamGamePanel
 
             for (var i = 0; i < processes.Length; i++)
             {
-                if (processes[i].MainWindowTitle == "[#] Steam Sign In [#]" && selectedUsers[userCount, 2] != "")
+                if (processes[i].MainWindowTitle == "[#] Steam Sign In [#]" && selectedUsers[userCount].SharedSecret != "")
                 {
                     SteamGuardAccount steamGuardAccount = new SteamGuardAccount();
-                    steamGuardAccount.SharedSecret = selectedUsers[userCount, 2];
+                    steamGuardAccount.SharedSecret = selectedUsers[userCount].SharedSecret;
                     string steamGuardCode = steamGuardAccount.GenerateSteamGuardCode();
                     SetForegroundWindow(processes[i].MainWindowHandle);
                     inputSimulator.Keyboard.Sleep(keyPressSleep);
@@ -396,6 +406,11 @@ namespace SteamGamePanel
                 }
             }
 
+            for (var i = 0; i < selectedUsers.Length; i++)
+            {
+                selectedUsers[i].SetGameWindowTitle();
+            }
+
             tmrSteamGuard.Stop();
         }
 
@@ -405,9 +420,9 @@ namespace SteamGamePanel
 
             if (processes.Length != selectedUsers.GetLength(0)) return;
 
-            for (var i = 0; i < processes.Length; i++)
+            for (var i = 0; i < selectedUsers.Length; i++)
             {
-                SetWindowTextA(processes[i].MainWindowHandle, selectedUsers[i, 0]);
+                selectedUsers[i].SetGameWindowTitle();
             }
         }
 
@@ -442,6 +457,7 @@ namespace SteamGamePanel
                 if (configuration[i].Contains("maFileDirectory")) configuration[i] = $"\t\"maFileDirectory\": \"{txtMaFileDirectory.Text.Replace("\\", "\\\\")}\",";
                 if (configuration[i].Contains("sandboxieLauncher")) configuration[i] = $"\t\"sandboxieLauncher\": \"{txtSandboxieLauncher.Text.Replace("\\", "\\\\")}\",";
                 if (configuration[i].Contains("sandboxieConfigurationFile")) configuration[i] = $"\t\"sandboxieConfigurationFile\": \"{txtSandboxieConfigurationFile.Text.Replace("\\", "\\\\")}\",";
+                if (configuration[i].Contains("ipPort")) configuration[i] = $"\t\"ipPort\": \"{txtIpPort.Text}\",";
                 if (configuration[i].Contains("\"users\": ["))
                 {
                     usersFound = true;
@@ -480,7 +496,7 @@ namespace SteamGamePanel
 
                                 for (var j = 0; j < sandboxieConfiguration.Length; j++)
                                 {
-                                    if (sandboxieConfiguration[j].Contains($"[{users[mlwPosition, 0]}]"))
+                                    if (sandboxieConfiguration[j].Contains($"[{users[mlwPosition].Username}]"))
                                     {
                                         sandboxieConfiguration[j] = "";
                                         userFound = true;
@@ -491,7 +507,7 @@ namespace SteamGamePanel
                                 }
                             }
 
-                            configuration[i] = $"\t\t{listViewUser}";
+                            configuration[i] = $"\t\t{listViewUser},";
                         }
                         else if (usersFound)
                         {
@@ -503,7 +519,7 @@ namespace SteamGamePanel
 
                                 for (var j = 0; j < sandboxieConfiguration.Length; j++)
                                 {
-                                    if (sandboxieConfiguration[j].Contains($"[{users[mlwPosition, 0]}]"))
+                                    if (sandboxieConfiguration[j].Contains($"[{users[mlwPosition].Username}]"))
                                     {
                                         sandboxieConfiguration[j] = "";
                                         userFound = true;
@@ -598,17 +614,63 @@ namespace SteamGamePanel
         {
             string configuration = "";
 
-            for (var i = 0; i < mlwUsers.Items[_mlwPosition].SubItems.Count; i++)
+            for (var i = 0; i < mlwUsers.Columns.Count; i++)
             {
                 if (i == 0) configuration += "\"";
 
-                configuration += $"{mlwUsers.Items[_mlwPosition].SubItems[i].Text}";
+                if (mlwUsers.Items[_mlwPosition].SubItems.Count - 1 >= i) configuration += $"{mlwUsers.Items[_mlwPosition].SubItems[i].Text}";
 
-                if (i == mlwUsers.Items[_mlwPosition].SubItems.Count - 1) configuration += "\",";
+                if (i == mlwUsers.Columns.Count - 1) configuration += "\"";
                 else configuration += ",";
             }
 
             return configuration;
+        }
+
+        static async void GetUserInvetory(int _user)
+        {
+            HttpClient client = new HttpClient();
+            Uri uri = new Uri(steamInventoryHttpRequest.Replace("<PROFILEID>", selectedUsers[_user].SteamID));
+
+            using (HttpResponseMessage response = await client.GetAsync(uri))
+            {
+                string responseText = await response.Content.ReadAsStringAsync();
+                selectedUsers[_user].SteamInventory = response.ToString();
+            }
+        }
+
+        private void txtIpPort_TextChanged(object sender, EventArgs e)
+        {
+            SetSaved(false);
+        }
+
+        public static bool FilesExist(bool _showMessage)
+        {
+            bool filesExist = true;
+            string message = "";
+
+            if (!File.Exists(steamLauncher)) {
+                message += "Could not find Steam launcher. Check if you have Steam installed.\n";
+                filesExist = false;
+            }
+            if (!Directory.Exists(maFileDirectoryToCopy))
+            {
+                message += "Could not find the maFile directory. Check if you have chosen the right file location.\n";
+                filesExist = false;
+            }
+            if (!File.Exists(sandboxieLauncher))
+            {
+                message += "Could not find Sandboxie. Check if you have chosen the right file location.\n";
+                filesExist = false;
+            }
+            if (!File.Exists(sandboxieConfigurationFile))
+            {
+                message += "Could not find Sandboxie configuration. Run Sandboxie to create it and check if you have chosen the right file location.\n";
+                filesExist = false;
+            }
+
+            if (_showMessage && message.Length != 0) MaterialMessageBox.Show(message, "Uwaga", MessageBoxButtons.OK, false);
+            return filesExist;
         }
     }
 }
